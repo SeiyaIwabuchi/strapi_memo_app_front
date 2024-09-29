@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+import { Memo as MemoCreate } from "./entities/memo/request/Memo";
+import { Memo } from "./entities/memo/response/Memo";
+
 
 interface EditMemoModalProps {
   open: boolean;
   onClose: () => void;
-  editMemo: (id: number, text: string) => void;
-  memo: { id: number; text: string } | null;
+  editMemo: (id: string, newMemo: MemoCreate) => void;
+  memo: Memo;
 }
 
 const style = {
@@ -14,24 +17,27 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: "80vw",
+  height: "80vh",
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
 };
 
 function EditMemoModal({ open, onClose, editMemo, memo }: EditMemoModalProps) {
-  const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
   useEffect(() => {
     if (memo) {
-      setText(memo.text);
+      setTitle(memo.Title);
+      setBody(memo.Body);
     }
   }, [memo]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (text.trim() && memo) {
-      editMemo(memo.id, text);
+    if (title.trim() && memo) {
+      editMemo(memo.documentId, { Title: title, Body: body, Deleted_at: null });
     }
   };
 
@@ -45,9 +51,18 @@ function EditMemoModal({ open, onClose, editMemo, memo }: EditMemoModalProps) {
           <TextField
             fullWidth
             multiline
-            rows={4}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            rows={1}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="タイトルを入力してください"
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            multiline
+            rows={25}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
             placeholder="メモを入力してください"
             sx={{ mb: 2 }}
           />

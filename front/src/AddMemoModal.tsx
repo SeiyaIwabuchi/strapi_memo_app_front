@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+import { Memo as MemoCreate } from "./entities/memo/request/Memo";
 
 interface AddMemoModalProps {
   open: boolean;
   onClose: () => void;
-  addMemo: (text: string) => void;
+  addMemo: (memo: MemoCreate) => void;
 }
 
 const style = {
@@ -19,13 +20,15 @@ const style = {
 };
 
 function AddMemoModal({ open, onClose, addMemo }: AddMemoModalProps) {
-  const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (text.trim()) {
-      addMemo(text);
-      setText('');
+    if (title.trim()) {
+      addMemo({ Title: title, Body: body, Deleted_at: null});
+      setTitle('');
+      setBody('');
     }
   };
 
@@ -36,12 +39,21 @@ function AddMemoModal({ open, onClose, addMemo }: AddMemoModalProps) {
           新しいメモを追加
         </Typography>
         <form onSubmit={handleSubmit}>
+        <TextField
+            fullWidth
+            multiline
+            rows={1}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="タイトルを入力してください"
+            sx={{ mb: 2 }}
+          />
           <TextField
             fullWidth
             multiline
             rows={4}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
             placeholder="メモを入力してください"
             sx={{ mb: 2 }}
           />

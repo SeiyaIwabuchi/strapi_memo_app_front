@@ -4,7 +4,8 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  "base": "/strapi_memo_app_front/",
+  base: "/strapi_memo_app_front/",
+  envDir: "./",
   server: {
     host: true,
     watch: {

@@ -1,34 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Typography, Box, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import MemoList from './MemoList';
 import AddMemoModal from './AddMemoModal';
 import EditMemoModal from './EditMemoModal';
+import { Memo as MemoCreate } from "./entities/memo/request/Memo";
+import { memoApi }from "./Providers";
+import { Memos, Memo } from './entities/memo/response/Memo';
 
-interface Memo {
-  id: number;
-  text: string;
-}
 
 function App() {
-  const [memos, setMemos] = useState<Memo[]>([]);
+  const [memos, setMemos] = useState<Memos>();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingMemo, setEditingMemo] = useState<Memo | null>(null);
 
-  const addMemo = (text: string) => {
-    setMemos([...memos, { id: Date.now(), text }]);
+  const addMemo = async (memo: MemoCreate) => {
+    await memoApi.create({ Title: memo.Title, Body: memo.Body, Deleted_at: memo.Deleted_at });
+    setMemos(await memoApi.getAll());
     setIsAddModalOpen(false);
   };
 
-  const editMemo = (id: number, newText: string) => {
-    setMemos(memos.map(memo => memo.id === id ? { ...memo, text: newText } : memo));
+  const editMemo = async (id: string, newMemo: MemoCreate) => {
+    await memoApi.update(id, { Title: newMemo.Title, Body: newMemo.Body, Deleted_at: newMemo.Deleted_at });
+    setMemos(await memoApi.getAll());
     setIsEditModalOpen(false);
     setEditingMemo(null);
   };
 
-  const deleteMemo = (id: number) => {
-    setMemos(memos.filter(memo => memo.id !== id));
+  const deleteMemo = async (memo: Memo) => {
+    await memoApi.remove(memo.documentId);
+    setMemos(await memoApi.getAll());
   };
 
   const openEditModal = (memo: Memo) => {
@@ -36,13 +38,17 @@ function App() {
     setIsEditModalOpen(true);
   };
 
+  useEffect(() => {
+    (async () => setMemos(await memoApi.getAll()))();
+  }, []);
+
   return (
     <Container maxWidth="sm">
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           メモ帳アプリ
         </Typography>
-        <MemoList memos={memos} deleteMemo={deleteMemo} editMemo={openEditModal} />
+        { memos ? <MemoList memos={memos.data.filter(memo => memo.Deleted_at == null)} deleteMemo={deleteMemo} editMemo={openEditModal} /> : <></>}
         <AddMemoModal open={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} addMemo={addMemo} />
         <EditMemoModal 
           open={isEditModalOpen} 
