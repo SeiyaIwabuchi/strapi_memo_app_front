@@ -2,7 +2,6 @@ import axios, { AxiosInstance } from "axios";
 
 
 class ApiBase {
-    apiToken = import.meta.env.VITE_STRAPI_API_TOKEN;
     baseUrl = import.meta.env.VITE_STRAPI_BASE_URL;
     axiosBase: AxiosInstance
 
