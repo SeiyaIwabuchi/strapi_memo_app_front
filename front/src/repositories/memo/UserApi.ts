@@ -9,5 +9,5 @@ export default class UserApi extends ApiBase {
     endpoint = "/users"
     
     getMyInfo = () => super.get<UserInfo>(`${this.endpoint}/me`).then(res => res.data);
-    authentication = () => this.axiosBase.get<Credential>(`/auth/keycloak/callback${location.search}`).then(res => res.data);
+    authentication = () => this.axiosBase.get<Credential>(`/api/auth/keycloak/callback${location.search}`).then(res => res.data);
 }

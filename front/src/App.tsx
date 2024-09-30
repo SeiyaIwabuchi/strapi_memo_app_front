@@ -65,7 +65,7 @@ function App() {
         if (err instanceof AxiosError) {
           if (err.status == 401) {
             if (location.search.indexOf("access_token") > 0){
-              const auth = (await axios.get(`${import.meta.env.VITE_STRAPI_BASE_URL}/api/auth/keycloak/callback${location.search}`, { responseType: 'json' })).data;
+              const auth = await userApi.authentication();
               localStorage.setItem('jwt', auth.jwt);
               setLoggedIn(true);
               setUserName(auth.user.username);
