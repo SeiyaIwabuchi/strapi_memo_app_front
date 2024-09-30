@@ -1,1 +1,1 @@
-{"root":["./src/AddMemoModal.tsx","./src/App.tsx","./src/EditMemoModal.tsx","./src/MemoForm.tsx","./src/MemoList.tsx","./src/main.tsx","./src/vite-env.d.ts"],"version":"5.6.2"}
+{"root":["./src/AddMemoModal.tsx","./src/App.tsx","./src/EditMemoModal.tsx","./src/MemoForm.tsx","./src/MemoList.tsx","./src/Providers.ts","./src/main.tsx","./src/vite-env.d.ts","./src/entities/memo/request/Memo.ts","./src/entities/memo/response/Memo.ts","./src/repositories/bases/ApiBase.ts","./src/repositories/memo/MemoApi.ts"],"version":"5.6.2"}

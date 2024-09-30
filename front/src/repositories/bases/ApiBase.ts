@@ -27,6 +27,7 @@ class ApiBase {
         })
         .catch(err => {
             console.error(err);
+            throw err;
         });
     }
 
@@ -39,6 +40,7 @@ class ApiBase {
         })
         .catch(err => {
             console.error(err);
+            throw err;
         });
     }
 
@@ -51,6 +53,7 @@ class ApiBase {
         })
         .catch(err => {
             console.error(err);
+            throw err;
         });
     }
 
@@ -63,6 +66,7 @@ class ApiBase {
         })
         .catch(err => {
             console.error(err);
+            throw err;
         });
     }
 }
