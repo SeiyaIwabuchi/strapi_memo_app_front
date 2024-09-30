@@ -9,17 +9,18 @@ class ApiBase {
     constructor() {
         this.axiosBase = axios.create({
             baseURL: this.baseUrl,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'bearer ' + this.apiToken
-            },
-            responseType: 'json'
+            responseType: 'json',
         });
     }
 
+    
+
     get<T>(endpoint: string, params: object = {}) {
         return this.axiosBase.get<T>("/api" + endpoint, {
-            params: params
+            params: params,
+            headers: {
+                Authorization: `bearer ${localStorage.getItem('jwt')}`,
+            },
         })
         .then(res => {
             console.debug(res);
@@ -33,7 +34,10 @@ class ApiBase {
 
     post<T>(endpoint: string, params: object = {}) {
         return this.axiosBase.post<T>("/api" + endpoint, {
-            params: params
+            params: params,
+            headers: {
+                Authorization: `bearer ${localStorage.getItem('jwt')}`,
+            },
         }).then(res => {
             console.debug(res);
             return res;
@@ -46,7 +50,10 @@ class ApiBase {
 
     put<T>(endpoint: string, params: object = {}) {
         return this.axiosBase.put<T>("/api" + endpoint, {
-            params: params
+            params: params,
+            headers: {
+                Authorization: `bearer ${localStorage.getItem('jwt')}`,
+            },
         }).then(res => {
             console.debug(res);
             return res;
@@ -59,7 +66,10 @@ class ApiBase {
 
     delete<T>(endpoint: string, params: object = {}) {
         return this.axiosBase.delete<T>("/api" + endpoint, {
-            params: params
+            params: params,
+            headers: {
+                Authorization: `bearer ${localStorage.getItem('jwt')}`,
+            },
         }).then(res => {
             console.debug(res);
             return res;
