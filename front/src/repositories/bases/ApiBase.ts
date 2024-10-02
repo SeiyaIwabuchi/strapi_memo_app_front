@@ -32,8 +32,7 @@ class ApiBase {
     }
 
     post<T>(endpoint: string, params: object = {}) {
-        return this.axiosBase.post<T>("/api" + endpoint, {
-            params: params,
+        return this.axiosBase.post<T>("/api" + endpoint, params, {
             headers: {
                 Authorization: `bearer ${localStorage.getItem('jwt')}`,
             },
@@ -48,8 +47,7 @@ class ApiBase {
     }
 
     put<T>(endpoint: string, params: object = {}) {
-        return this.axiosBase.put<T>("/api" + endpoint, {
-            params: params,
+        return this.axiosBase.put<T>("/api" + endpoint, params, {
             headers: {
                 Authorization: `bearer ${localStorage.getItem('jwt')}`,
             },

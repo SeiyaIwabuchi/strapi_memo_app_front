@@ -12,7 +12,7 @@ export default class MemoApi extends ApiBase {
 
     create = (body: MemoRequest) => super.post(this.endpoint, { data: body });
 
-    update = (documentId: string, body: MemoRequest) => super.put(`${this.endpoint}/${documentId}`, body);
+    update = (documentId: string, body: MemoRequest) => super.put(`${this.endpoint}/${documentId}`, { data: body});
 
     remove = (documentId: string) => super.delete(`${this.endpoint}/${documentId}`);
 }
