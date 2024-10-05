@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import { Memo as MemoCreate } from "./entities/memo/request/Memo";
-
-interface AddMemoModalProps {
-  open: boolean;
-  onClose: () => void;
-  addMemo: (memo: MemoCreate) => void;
-}
+import { IMemo as MemoCreate } from "../../entities/memo/request/IMemo";
+import { memoApi } from '../../providers/Providers';
+import { useAtom, useSetAtom } from 'jotai';
+import { memoListAtom } from '../../states/Memo/MemoListState';
+import { isOpenAddMomeModal } from '../../states/Memo/AddMemoModalState';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -19,7 +17,17 @@ const style = {
   p: 4,
 };
 
-function AddMemoModal({ open, onClose, addMemo }: AddMemoModalProps) {
+function AddMemoModal() {
+
+  const setMemos = useSetAtom(memoListAtom);
+  const [isAddModelOpen, setIsAddModalOpen] = useAtom(isOpenAddMomeModal);
+
+  const addMemo = async (memo: MemoCreate) => {
+    await memoApi.create({ Title: memo.Title, Body: memo.Body, Deleted_at: memo.Deleted_at });
+    setMemos(await memoApi.getAll());
+    setIsAddModalOpen(false);
+  };
+
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
@@ -33,7 +41,7 @@ function AddMemoModal({ open, onClose, addMemo }: AddMemoModalProps) {
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={isAddModelOpen} onClose={() => setIsAddModalOpen(false)}>
       <Box sx={style}>
         <Typography variant="h6" component="h2" gutterBottom>
           新しいメモを追加

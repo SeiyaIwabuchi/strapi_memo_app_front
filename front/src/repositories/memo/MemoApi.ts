@@ -1,6 +1,6 @@
 import ApiBase from "../bases/ApiBase"
 import { Memos, Memo } from "../../entities/memo/response/Memo"
-import { Memo as MemoRequest } from "../../entities/memo/request/Memo"
+import { IMemo as MemoRequest } from "../../entities/memo/request/IMemo"
 
 export default class MemoApi extends ApiBase {
 

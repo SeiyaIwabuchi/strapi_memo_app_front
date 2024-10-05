@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import { Memo as MemoCreate } from "./entities/memo/request/Memo";
-import { Memo } from "./entities/memo/response/Memo";
+import { IMemo as MemoCreate } from "../../entities/memo/request/IMemo";
+import { Memo } from "../../entities/memo/response/Memo";
+import { memoApi } from '../../providers/Providers';
+import { useAtom, useSetAtom } from 'jotai';
+import { memoListAtom } from '../../states/Memo/MemoListState';
+import { edittingMemoAtom, isEditModalOpenAtom } from '../../states/Memo/EditMemoStateState';
 
-
-interface EditMemoModalProps {
-  open: boolean;
-  onClose: () => void;
-  editMemo: (id: string, newMemo: MemoCreate) => void;
-  memo: Memo;
-}
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -23,9 +20,21 @@ const style = {
   p: 4,
 };
 
-function EditMemoModal({ open, onClose, editMemo, memo }: EditMemoModalProps) {
+function EditMemoModal() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+
+  const [open, setIsEditModalOpen] = useAtom(isEditModalOpenAtom);
+  const [memo, setEditingMemo] = useAtom(edittingMemoAtom);
+
+  const setMemos = useSetAtom(memoListAtom);
+
+  const editMemo = async (id: string, newMemo: MemoCreate) => {
+    await memoApi.update(id, { Title: newMemo.Title, Body: newMemo.Body, Deleted_at: newMemo.Deleted_at });
+    setMemos(await memoApi.getAll());
+    setIsEditModalOpen(false);
+    setEditingMemo(null);
+  };
 
   useEffect(() => {
     if (memo) {
@@ -42,7 +51,7 @@ function EditMemoModal({ open, onClose, editMemo, memo }: EditMemoModalProps) {
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={() => setIsEditModalOpen(false)}>
       <Box sx={style}>
         <Typography variant="h6" component="h2" gutterBottom>
           メモを編集

@@ -1,4 +1,9 @@
 import axios, { AxiosInstance } from "axios";
+import { getDefaultStore, useSetAtom } from "jotai";
+import snackbarStateAtom from "../../states/SnackbarStateAtom";
+
+
+const store = getDefaultStore();
 
 
 class ApiBase {
@@ -27,6 +32,7 @@ class ApiBase {
         })
         .catch(err => {
             console.error(err);
+            store.set(snackbarStateAtom, { isShow: true, message: `${err.code} ${err.message} ${err.name}` });
             throw err;
         });
     }
